@@ -40,6 +40,13 @@ router.get(
 );
 
 router.get(
+  "/admin/heroes/stats",
+  authenticate,
+  authorize("SUPER_ADMIN"),
+  HeroController.stats
+);
+
+router.get(
   "/admin/heroes/:id",
   authenticate,
   authorize("SUPER_ADMIN"),

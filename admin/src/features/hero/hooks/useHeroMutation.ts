@@ -2,14 +2,19 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { createHero } from "../api/hero.api";
 import { HERO_QUERY_KEYS } from "../constants/hero.constants";
 
-export function useCreateHero() {
+interface HeroMutationOptions<T> {
+  mutationFn: (id: string) => Promise<T>;
+}
+
+export function useHeroMutation<T>({
+  mutationFn,
+}: HeroMutationOptions<T>) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createHero,
+    mutationFn,
 
     onSuccess: () => {
       queryClient.invalidateQueries({

@@ -1,18 +1,17 @@
 "use client";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import {
   DataTable,
   TableHead,
   StatusBadge,
 } from "@/components/admin";
 
-import type {
-  Hero,
-} from "../types/hero.types";
-
-import type {
-  PaginationMeta,
-} from "@/types/pagination.types";
+import HeroActions from "./HeroActions";
+import type { Hero } from "../types/hero.types";
+import type { PaginationMeta } from "@/types/pagination.types";
 
 interface HeroTableProps {
   heroes: Hero[];
@@ -21,9 +20,9 @@ interface HeroTableProps {
 
   loading: boolean;
 
-  onPageChange: (
-    page: number
-  ) => void;
+  onPageChange: (page: number) => void;
+
+  trashed?: boolean;
 }
 
 export default function HeroTable({
@@ -31,7 +30,10 @@ export default function HeroTable({
   pagination,
   loading,
   onPageChange,
+  trashed = false,
 }: HeroTableProps) {
+  const router = useRouter();
+
   return (
     <DataTable
       loading={loading}
@@ -45,6 +47,7 @@ export default function HeroTable({
     >
       <TableHead
         columns={[
+          "Image",
           "Title",
           "Status",
           "Order",
@@ -54,43 +57,65 @@ export default function HeroTable({
       />
 
       <tbody>
-
         {heroes.map((hero) => (
-
           <tr
             key={hero._id}
-            className="border-t"
+            className="border-t hover:bg-slate-50 transition-colors"
           >
-            <td className="px-6 py-4 font-medium">
-              {hero.title}
-            </td>
-
+            {/* Image */}
             <td className="px-6 py-4">
-              <StatusBadge
-                status={hero.status}
-              />
+              <div className="overflow-hidden rounded-lg border border-slate-200">
+                <Image
+                  src={hero.desktopImage.url}
+                  alt={hero.title}
+                  width={80}
+                  height={50}
+                  className="h-12 w-20 object-cover"
+                />
+              </div>
             </td>
 
+            {/* Title */}
+            <td className="px-6 py-4">
+              <div>
+                <p className="font-medium text-slate-900">
+                  {hero.title}
+                </p>
+
+                {hero.subtitle && (
+                  <p className="mt-1 text-sm text-slate-500 line-clamp-1">
+                    {hero.subtitle}
+                  </p>
+                )}
+              </div>
+            </td>
+
+            {/* Status */}
+            <td className="px-6 py-4">
+              <StatusBadge status={hero.status} />
+            </td>
+
+            {/* Display Order */}
             <td className="px-6 py-4">
               {hero.displayOrder}
             </td>
 
-            <td className="px-6 py-4">
-              {new Date(
-                hero.updatedAt
-              ).toLocaleDateString()}
+            {/* Updated */}
+            <td className="px-6 py-4 whitespace-nowrap">
+              {new Date(hero.updatedAt).toLocaleDateString()}
             </td>
 
+            {/* Actions */}
             <td className="px-6 py-4">
-              Edit
+              <HeroActions
+                heroId={hero._id}
+                status={hero.status}
+                trashed={trashed}
+              />
             </td>
-
           </tr>
-
         ))}
-
       </tbody>
-
     </DataTable>
   );
 }

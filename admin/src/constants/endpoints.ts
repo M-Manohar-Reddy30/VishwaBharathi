@@ -33,6 +33,7 @@ export const ENDPOINTS = {
   SETTINGS: "/admin/settings",
 
   // Upload
+  UPLOAD: "/upload/image",
   IMAGE_UPLOAD: "/image",
   IMAGES_UPLOAD: "/images",
 } as const;

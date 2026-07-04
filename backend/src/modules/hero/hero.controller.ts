@@ -44,6 +44,18 @@ class HeroController {
     );
   });
 
+  stats = asyncHandler(async (_req: Request, res: Response) => {
+
+    const stats = await HeroService.getStats();
+
+    return ApiResponse.success(
+      res,
+      stats,
+      "Hero statistics fetched successfully"
+    );
+
+  });
+
   getById = asyncHandler(async (req: Request, res: Response) => {
     const hero = await HeroService.getById(req.params.id);
 

@@ -1,0 +1,1 @@
+export { default as ContentTabs } from "./ContentTabs";

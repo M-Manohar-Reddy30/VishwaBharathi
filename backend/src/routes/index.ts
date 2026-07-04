@@ -19,7 +19,7 @@ router.use("/health", healthRoute);
 
 router.use("/auth", authRoute);
 
-router.use(uploadRoute);
+router.use("/upload", uploadRoute);
 
 router.use(heroRoute);
 
