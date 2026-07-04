@@ -13,4 +13,11 @@ router.post(
   (req, res) => UploadController.upload(req, res)
 );
 
+router.post(
+    "/images",
+    authenticate,
+    upload.array("images", 20),
+    (req, res) => UploadController.uploadMultiple(req, res)
+);
+
 export default router;

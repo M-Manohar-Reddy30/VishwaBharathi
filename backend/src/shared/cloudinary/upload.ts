@@ -1,22 +1,47 @@
 import cloudinary from "./cloudinary.js";
+import path from "path";
 
-interface UploadResult {
+export interface UploadResult {
   publicId: string;
-  secureUrl: string;
+  url: string;
+  width?: number;
+  height?: number;
+  format: string;
+  bytes: number;
+  resourceType: string;
 }
 
-export const uploadImage = async (
+export const uploadFile = async (
   filePath: string,
   folder: string
 ): Promise<UploadResult> => {
-  const result = await cloudinary.uploader.upload(filePath, {
-    folder: `vbk/${folder}`,
-    resource_type: "image",
-    overwrite: true,
-  });
+
+  const extension = path
+    .extname(filePath)
+    .toLowerCase();
+
+  const resourceType =
+    extension === ".pdf"
+      ? "raw"
+      : "image";
+
+  const result =
+    await cloudinary.uploader.upload(
+      filePath,
+      {
+        folder: `vbk/${folder}`,
+        resource_type: resourceType,
+        overwrite: true,
+      }
+    );
 
   return {
     publicId: result.public_id,
-    secureUrl: result.secure_url,
+    url: result.secure_url,
+    width: result.width,
+    height: result.height,
+    format: result.format,
+    bytes: result.bytes,
+    resourceType: result.resource_type,
   };
 };

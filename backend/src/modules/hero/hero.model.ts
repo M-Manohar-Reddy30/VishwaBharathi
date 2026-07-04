@@ -6,27 +6,8 @@ import {
   HERO_STATUS,
   HERO_TEXT_ALIGN,
 } from "./hero.constants.js";
-
-const imageSchema = new Schema(
-  {
-    publicId: { type: String, required: true },
-
-    url: { type: String, required: true },
-
-    alt: { type: String, default: "" },
-
-    width: Number,
-
-    height: Number,
-
-    format: String,
-
-    bytes: Number,
-  },
-  {
-    _id: false,
-  }
-);
+import imageSchema from "../../shared/schemas/image.schema.js";
+import auditSchema from "../../shared/schemas/audit.schema.js";
 
 const buttonSchema = new Schema(
   {
@@ -62,24 +43,6 @@ const seoSchema = new Schema(
     canonicalUrl: String,
 
     ogImage: String,
-  },
-  {
-    _id: false,
-  }
-);
-
-const auditSchema = new Schema(
-  {
-    createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: "Admin",
-      required: true,
-    },
-
-    updatedBy: {
-      type: Schema.Types.ObjectId,
-      ref: "Admin",
-    },
   },
   {
     _id: false,
@@ -154,6 +117,23 @@ const heroSchema = new Schema(
     seo: seoSchema,
 
     audit: auditSchema,
+
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
+
+    deletedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "Admin",
+      default: null,
+    },
   },
   {
     timestamps: true,

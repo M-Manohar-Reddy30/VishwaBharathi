@@ -5,6 +5,9 @@ import {
   UpdateQuery,
 } from "mongoose";
 
+import { PaginationQuery } from "../types/pagination.types.js";
+import { getPagination } from "../utils/pagination.js";
+
 export default class BaseRepository<T extends Document> {
   constructor(protected readonly model: Model<T>) {}
 
@@ -40,5 +43,67 @@ export default class BaseRepository<T extends Document> {
 
   count(filter: FilterQuery<T> = {}) {
     return this.model.countDocuments(filter);
+  }
+
+  exists(filter: FilterQuery<T>) {
+  return this.model.exists(filter);
+}
+
+  async findPaginated(
+    query: PaginationQuery,
+    options: {
+      filter?: FilterQuery<T>;
+      searchFields?: string[];
+    } = {}
+  ) {
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      status,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = query;
+
+    const { skip } = getPagination(page, limit);
+
+    const filter: FilterQuery<T> = {
+      ...(options.filter || {}),
+    };
+
+    if (status) {
+      (filter as any).status = status;
+    }
+
+    if (search && options.searchFields?.length) {
+      filter.$or = options.searchFields.map((field) => ({
+        [field]: {
+          $regex: search,
+          $options: "i",
+        },
+      })) as any;
+    }
+
+    const [data, total] = await Promise.all([
+      this.model
+        .find(filter)
+        .sort({
+          [sortBy]: sortOrder === "asc" ? 1 : -1,
+        })
+        .skip(skip)
+        .limit(limit),
+
+      this.model.countDocuments(filter),
+    ]);
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    };
   }
 }

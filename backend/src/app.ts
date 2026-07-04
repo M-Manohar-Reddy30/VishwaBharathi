@@ -10,6 +10,7 @@ import morgan from "morgan";
 import errorMiddleware from "./shared/middleware/error.middleware.js";
 import routes from "./routes/index.js";
 import ApiResponse from "./utils/ApiResponse.js";
+import apiLimiter from "./shared/middleware/rateLimit.middleware.js";
 
 dotenv.config();
 
@@ -31,25 +32,31 @@ app.use(hpp());
 
 app.use(compression());
 
-app.use(express.json({ limit: "10mb" }));
+app.use(apiLimiter);
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "20mb" }));
+
+app.use(express.urlencoded({ extended: true, limit:"20mb" }));
 
 app.use(cookieParser());
 
 app.use(morgan("dev"));
 
 app.get("/", (_req, res) => {
-  return res.json(
-    ApiResponse.success("Welcome to Vishwa Bharathi Platform API")
+  return ApiResponse.success(
+    res,
+    null,
+    "Welcome to Vishwa Bharathi Platform API"
   );
 });
 
 app.use("/api/v1", routes);
 
 app.use((_req, res) => {
-  return res.status(404).json(
-    ApiResponse.error("Route Not Found")
+  return ApiResponse.error(
+    res,
+    "Route Not Found",
+    404
   );
 });
 

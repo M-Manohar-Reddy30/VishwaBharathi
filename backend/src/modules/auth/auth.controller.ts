@@ -4,6 +4,7 @@ import asyncHandler from "../../shared/utils/asyncHandler.js";
 import AuthService from "./auth.service.js";
 import { loginSchema } from "./auth.validation.js";
 import { AuthRequest } from "./auth.middleware.js";
+import ApiResponse from "../../utils/ApiResponse.js";
 
 class AuthController {
   login = asyncHandler(async (req: Request, res: Response) => {
@@ -11,19 +12,19 @@ class AuthController {
 
     const result = await AuthService.login(body);
 
-    return res.status(200).json({
-      success: true,
-      message: "Login Successful",
-      data: result,
-    });
+    return ApiResponse.success(
+      res,
+      result,
+      "Login successful"
+    );
   });
 
   me = asyncHandler(async (req: AuthRequest, res: Response) => {
-    return res.status(200).json({
-      success: true,
-      message: "Authenticated",
-      data: req.admin,
-    });
+    return ApiResponse.success(
+      res,
+      req.admin,
+      "Authenticated"
+    );
   });
 }
 

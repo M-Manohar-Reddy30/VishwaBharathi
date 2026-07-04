@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 import Admin from "./auth.model.js";
 import env from "../../config/env.js";
+import ApiError from "../../shared/errors/ApiError.js";
 
 interface LoginPayload {
   email: string;
@@ -16,7 +17,10 @@ class AuthService {
     }).select("+password");
 
     if (!admin) {
-      throw new Error("Invalid email or password");
+      throw new ApiError(
+        401,
+        "Invalid email or password"
+      );
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -25,11 +29,17 @@ class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new Error("Invalid email or password");
+      throw new ApiError(
+        401,
+        "Invalid email or password"
+      );
     }
 
     if (!admin.isActive) {
-      throw new Error("Your account has been disabled");
+      throw new ApiError(
+        403,
+        "Your account has been disabled"
+      );
     }
 
     admin.lastLogin = new Date();
@@ -43,7 +53,7 @@ class AuthService {
       },
       env.JWT_ACCESS_SECRET,
       {
-        expiresIn: "15m",
+        expiresIn: env.JWT_ACCESS_EXPIRES,
       }
     );
 
@@ -53,7 +63,7 @@ class AuthService {
       },
       env.JWT_REFRESH_SECRET,
       {
-        expiresIn: "7d",
+        expiresIn: env.JWT_REFRESH_EXPIRES,
       }
     );
 

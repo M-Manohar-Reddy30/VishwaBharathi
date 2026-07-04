@@ -1,0 +1,14 @@
+export const STAFF_STATUS = [
+  "ACTIVE",
+  "INACTIVE",
+] as const;
+
+export const STAFF_DEPARTMENT = [
+  "MANAGEMENT",
+  "ADMINISTRATION",
+  "SPECIAL_EDUCATION",
+  "THERAPY",
+  "VOCATIONAL_TRAINING",
+  "SUPPORT_STAFF",
+  "OTHER",
+] as const;

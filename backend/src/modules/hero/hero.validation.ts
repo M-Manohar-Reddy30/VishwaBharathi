@@ -1,33 +1,17 @@
 import { z } from "zod";
-
-export const imageAssetSchema = z.object({
-  publicId: z.string().min(1),
-  url: z.string().url(),
-  alt: z.string().default(""),
-  width: z.number().positive(),
-  height: z.number().positive(),
-  format: z.string(),
-  bytes: z.number().nonnegative(),
-});
+import { imageSchema } from "../../shared/schemas/image.validation.js";
+import { seoSchema } from "../../shared/schemas/seo.validation.js";
 
 export const buttonSchema = z.object({
   text: z.string().min(1).max(50),
+
   url: z.string().min(1),
-  target: z.enum(["_self", "_blank"]),
-  variant: z.enum(["primary", "secondary", "outline"]),
-});
 
-export const seoSchema = z.object({
-  metaTitle: z.string().max(60),
-  metaDescription: z.string().max(160),
-  keywords: z.array(z.string()).default([]),
-  canonicalUrl: z.string().url().optional(),
-  ogImage: z.string().url().optional(),
-});
+  target: z.enum(["_self", "_blank"]).default("_self"),
 
-export const auditSchema = z.object({
-  createdBy: z.string(),
-  updatedBy: z.string().optional(),
+  variant: z
+    .enum(["primary", "secondary", "outline"])
+    .default("primary"),
 });
 
 export const createHeroSchema = z.object({
@@ -37,27 +21,29 @@ export const createHeroSchema = z.object({
 
   description: z.string().max(600).optional(),
 
-  desktopImage: imageAssetSchema,
+  desktopImage: imageSchema,
 
-  mobileImage: imageAssetSchema,
+  mobileImage: imageSchema,
 
-  primaryButton: buttonSchema,
+  primaryButton: buttonSchema.optional(),
 
   secondaryButton: buttonSchema.optional(),
 
   overlayOpacity: z.number().min(0).max(100).default(40),
 
-  textAlign: z.enum(["left", "center", "right"]).default("left"),
+  textAlign: z
+    .enum(["left", "center", "right"])
+    .default("left"),
 
   displayOrder: z.number().int().min(1),
 
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
+  status: z
+    .enum(["DRAFT", "PUBLISHED", "ARCHIVED"])
+    .default("DRAFT"),
 
   publishedAt: z.coerce.date().optional(),
 
   expiresAt: z.coerce.date().optional(),
 
-  seo: seoSchema,
-
-  audit: auditSchema,
+  seo: seoSchema.optional(),
 });
