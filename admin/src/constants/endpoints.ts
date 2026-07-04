@@ -3,7 +3,7 @@ export const ENDPOINTS = {
   ME: "/auth/me",
 
   DASHBOARD_STATS: "/admin/dashboard/stats",
-  DASHBOARD_ACTIVITY: "/admin/dashboard/activity",
+  DASHBOARD_ACTIVITY: "/admin/dashboard/recent-activities",
 
   HERO: "/admin/hero",
   GALLERY: "/admin/gallery",

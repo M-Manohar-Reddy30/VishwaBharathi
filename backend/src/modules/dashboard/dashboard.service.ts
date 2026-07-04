@@ -3,7 +3,7 @@ import AuditService from "../audit/audit.service.js";
 
 class DashboardService {
     async getStats() {
-        return DashboardRepository.getHeroStats();
+        return DashboardRepository.getDashboardStats();
     }
 
     async getRecentActivities() {
