@@ -2,7 +2,6 @@ import api from "@/lib/api";
 import { ENDPOINTS } from "@/constants/endpoints";
 
 import {
-  getAccessToken,
   setAccessToken,
   removeAccessToken,
 } from "../utils/token";
@@ -36,19 +35,8 @@ export async function login(
  * Current Logged-in Admin
  */
 export async function getMe(): Promise<Admin> {
-  const token = getAccessToken();
-
-  if (!token) {
-    throw new Error("No access token found.");
-  }
-
   const response = await api.get<ApiResponse<Admin>>(
-    ENDPOINTS.ME,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    ENDPOINTS.ME
   );
 
   return response.data.data;
