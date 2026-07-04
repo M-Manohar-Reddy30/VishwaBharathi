@@ -1,17 +1,20 @@
-"use client";
+import { UI } from "@/constants/ui";
 
-interface PageContainerProps {
+interface Props {
   children: React.ReactNode;
 }
 
 export default function PageContainer({
   children,
-}: PageContainerProps) {
+}: Props) {
   return (
-    <main className="flex-1 overflow-auto bg-slate-50">
-      <div className="mx-auto w-full max-w-7xl p-6">
-        {children}
-      </div>
+    <main
+      style={{
+        marginLeft: UI.sidebarWidth,
+      }}
+      className="min-h-screen bg-slate-50"
+    >
+      {children}
     </main>
   );
 }

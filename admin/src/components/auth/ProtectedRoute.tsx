@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import LoadingScreen from "@/components/shared/LoadingScreen";
-import useAuth from "@/features/auth/hooks/useAuth";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+
+import { Spinner } from "@/components/ui";
 
 interface Props {
   children: React.ReactNode;
@@ -15,26 +16,23 @@ export default function ProtectedRoute({
 }: Props) {
   const router = useRouter();
 
-  const {
-    loading,
-    isAuthenticated,
-  } = useAuth();
+  const { admin, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!loading && !admin) {
       router.replace("/login");
     }
-  }, [
-    loading,
-    isAuthenticated,
-    router,
-  ]);
+  }, [loading, admin, router]);
 
   if (loading) {
-    return <LoadingScreen />;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Spinner size={30} />
+      </div>
+    );
   }
 
-  if (!isAuthenticated) {
+  if (!admin) {
     return null;
   }
 

@@ -1,19 +1,17 @@
-import Cookies from "js-cookie";
+const TOKEN_KEY = "vb_admin_access_token";
 
-const ACCESS_TOKEN = "vbk_access_token";
+export function getToken() {
+  if (typeof window === "undefined") {
+    return null;
+  }
 
-export function setAccessToken(token: string) {
-  Cookies.set(ACCESS_TOKEN, token, {
-    expires: 1,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-  });
+  return localStorage.getItem(TOKEN_KEY);
 }
 
-export function getAccessToken() {
-  return Cookies.get(ACCESS_TOKEN);
+export function setToken(token: string) {
+  localStorage.setItem(TOKEN_KEY, token);
 }
 
-export function removeAccessToken() {
-  Cookies.remove(ACCESS_TOKEN);
+export function removeToken() {
+  localStorage.removeItem(TOKEN_KEY);
 }

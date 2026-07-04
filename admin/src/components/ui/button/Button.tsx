@@ -1,84 +1,88 @@
+"use client";
+
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import { Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/cn";
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-xl font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        primary:
-          "bg-blue-600 text-white hover:bg-blue-700",
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "ghost"
+  | "danger";
 
-        secondary:
-          "bg-slate-100 text-slate-900 hover:bg-slate-200",
-
-        outline:
-          "border border-slate-300 bg-white hover:bg-slate-50",
-
-        ghost:
-          "hover:bg-slate-100",
-
-        danger:
-          "bg-red-600 text-white hover:bg-red-700",
-      },
-
-      size: {
-        sm: "h-9 px-3 text-sm",
-
-        md: "h-11 px-5",
-
-        lg: "h-12 px-6 text-base",
-
-        icon: "h-10 w-10",
-      },
-    },
-
-    defaultVariants: {
-      variant: "primary",
-      size: "md",
-    },
-  }
-);
+type ButtonSize =
+  | "sm"
+  | "md"
+  | "lg";
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   loading?: boolean;
 }
 
-export function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  loading = false,
+const variantClasses: Record<
+  ButtonVariant,
+  string
+> = {
+  primary:
+    "bg-blue-600 text-white hover:bg-blue-700",
+
+  secondary:
+    "bg-slate-100 text-slate-900 hover:bg-slate-200",
+
+  outline:
+    "border border-slate-300 bg-white hover:bg-slate-50",
+
+  ghost:
+    "hover:bg-slate-100",
+
+  danger:
+    "bg-red-600 text-white hover:bg-red-700",
+};
+
+const sizeClasses: Record<
+  ButtonSize,
+  string
+> = {
+  sm: "h-9 px-3 text-sm",
+
+  md: "h-10 px-4",
+
+  lg: "h-11 px-6",
+};
+
+export default function Button({
   children,
+  className,
+  variant = "primary",
+  size = "md",
+  loading = false,
   disabled,
   ...props
 }: ButtonProps) {
-  const Component = asChild ? Slot : "button";
-
   return (
-    <Component
+    <button
       className={cn(
-        buttonVariants({
-          variant,
-          size,
-        }),
+        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-60",
+        variantClasses[variant],
+        sizeClasses[size],
         className
       )}
       disabled={disabled || loading}
       {...props}
     >
       {loading && (
-        <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+        <Loader2
+          size={18}
+          className="animate-spin"
+        />
       )}
 
       {children}
-    </Component>
+    </button>
   );
 }

@@ -1,14 +1,18 @@
+import { Card } from "@/components/ui";
+
 export default function DashboardPage() {
   return (
-    <div className="space-y-4">
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
-      <h2 className="text-4xl font-bold">
-        Welcome 👋
-      </h2>
+      <Card>
+        <h2 className="text-lg font-semibold">
+          Welcome 👋
+        </h2>
 
-      <p className="text-slate-600">
-        Vishwa Bharathi Administration Dashboard
-      </p>
+        <p className="mt-2 text-slate-500">
+          Vishwa Bharathi CMS Dashboard
+        </p>
+      </Card>
 
     </div>
   );

@@ -1,82 +1,58 @@
 import {
-  LayoutDashboard,
+  CalendarDays,
+  FileText,
+  GraduationCap,
+  Home,
   Image,
   Images,
-  CalendarDays,
-  Users,
-  Bell,
-  GraduationCap,
-  MessageSquare,
   Settings,
+  Users,
 } from "lucide-react";
 
 export const navigation = [
   {
-    label: "GENERAL",
-    items: [
-      {
-        title: "Dashboard",
-        href: "/dashboard",
-        icon: LayoutDashboard,
-      },
-    ],
+    title: "Dashboard",
+    href: "/dashboard",
+    icon: Home,
   },
-
   {
-    label: "WEBSITE",
-    items: [
-      {
-        title: "Hero",
-        href: "/hero",
-        icon: Image,
-      },
-      {
-        title: "Gallery",
-        href: "/gallery",
-        icon: Images,
-      },
-      {
-        title: "Events",
-        href: "/events",
-        icon: CalendarDays,
-      },
-      {
-        title: "Notices",
-        href: "/notices",
-        icon: Bell,
-      },
-    ],
+    title: "Hero",
+    href: "/hero",
+    icon: Image,
   },
-
   {
-    label: "MANAGEMENT",
-    items: [
-      {
-        title: "Staff",
-        href: "/staff",
-        icon: Users,
-      },
-      {
-        title: "Admissions",
-        href: "/admissions",
-        icon: GraduationCap,
-      },
-      {
-        title: "Contact",
-        href: "/contact",
-        icon: MessageSquare,
-      },
-    ],
+    title: "Gallery",
+    href: "/gallery",
+    icon: Images,
   },
-
   {
-    label: "SYSTEM",
-    items: [
-      {
-        title: "Settings",
-        href: "/settings",
-        icon: Settings,
-      },
-    ],
+    title: "Events",
+    href: "/events",
+    icon: CalendarDays,
   },
-];
+  {
+    title: "Staff",
+    href: "/staff",
+    icon: Users,
+  },
+  {
+    title: "Notices",
+    href: "/notices",
+    icon: FileText,
+  },
+  {
+    title: "Admissions",
+    href: "/admissions",
+    icon: GraduationCap,
+  },
+  {
+    title: "Contact",
+    href: "/contact",
+    icon: FileText,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: Settings,
+  },
+] as const;

@@ -1,117 +1,124 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { toast } from "sonner";
 
-import {
-  Button,
-  Card,
-  FormField,
-  Input,
-  PasswordInput,
-} from "@/components/ui";
+import { Button, Card, Input } from "@/components/ui";
 
-import useAuth from "../hooks/useAuth";
 import {
   loginSchema,
-  type LoginFormValues,
+  LoginFormValues,
 } from "../schemas/login.schema";
+
+import { useLogin } from "../hooks/useLogin";
+import { useAuth } from "../hooks/useAuth";
+
+import { setToken } from "../utils/token";
 
 export default function LoginForm() {
   const router = useRouter();
 
-  const { login } = useAuth();
+  const { refresh } = useAuth();
 
-  const {
-    register,
-    handleSubmit,
-    formState: {
-      errors,
-      isSubmitting,
-    },
-  } = useForm<LoginFormValues>({
+  const loginMutation = useLogin();
+
+  const methods = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
+
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(values: LoginFormValues) {
+  async function onSubmit(
+    values: LoginFormValues
+  ) {
     try {
-      await login(values);
+      const result =
+        await loginMutation.mutateAsync(values);
 
-      toast.success("Login Successful");
+      setToken(result.accessToken);
 
-      router.push("/dashboard");
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast.error(
-          error.response?.data?.message ??
-            "Invalid email or password."
-        );
-      } else {
-        toast.error("Something went wrong.");
-      }
+      await refresh();
+
+      toast.success("Welcome back!");
+
+      router.replace("/dashboard");
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.message ??
+          "Invalid email or password."
+      );
     }
   }
 
   return (
-    <Card className="w-full max-w-md space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold">
-          Welcome Back
-        </h1>
+    <Card className="w-full max-w-md">
 
-        <p className="text-slate-500">
-          Sign in to continue.
-        </p>
-      </div>
+      <h1 className="mb-6 text-center text-2xl font-bold">
+        Admin Login
+      </h1>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5"
-      >
-        <FormField
-          label="Email"
-          htmlFor="email"
-          error={errors.email?.message}
+      <FormProvider {...methods}>
+
+        <form
+          onSubmit={methods.handleSubmit(onSubmit)}
+          className="space-y-5"
         >
-          <Input
-            id="email"
-            type="email"
-            placeholder="admin@vbk.org"
-            autoComplete="email"
-            {...register("email")}
-          />
-        </FormField>
 
-        <FormField
-          label="Password"
-          htmlFor="password"
-          error={errors.password?.message}
-        >
-          <PasswordInput
-            id="password"
-            placeholder="Enter your password"
-            autoComplete="current-password"
-            {...register("password")}
-          />
-        </FormField>
+          <div>
 
-        <Button
-          type="submit"
-          loading={isSubmitting}
-          className="w-full"
-        >
-          {isSubmitting
-            ? "Signing In..."
-            : "Sign In"}
-        </Button>
-      </form>
+            <label className="mb-2 block text-sm font-medium">
+              Email
+            </label>
+
+            <Input
+              type="email"
+              placeholder="admin@example.com"
+              {...methods.register("email")}
+            />
+
+            <p className="mt-1 text-sm text-red-500">
+              {methods.formState.errors.email?.message}
+            </p>
+
+          </div>
+
+          <div>
+
+            <label className="mb-2 block text-sm font-medium">
+              Password
+            </label>
+
+            <Input
+              type="password"
+              placeholder="********"
+              {...methods.register("password")}
+            />
+
+            <p className="mt-1 text-sm text-red-500">
+              {methods.formState.errors.password?.message}
+            </p>
+
+          </div>
+
+          <Button
+            type="submit"
+            loading={loginMutation.isPending}
+            className="w-full"
+          >
+            Login
+          </Button>
+
+        </form>
+
+      </FormProvider>
+
     </Card>
   );
 }

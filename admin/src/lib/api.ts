@@ -1,20 +1,21 @@
 import axios from "axios";
 
-import { getAccessToken } from "@/features/auth/utils/token";
+import { getToken } from "@/features/auth/utils/token";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  const token = getAccessToken();
+  const token = getToken();
 
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization =
+      `Bearer ${token}`;
   }
 
   return config;

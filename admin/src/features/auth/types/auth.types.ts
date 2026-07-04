@@ -5,7 +5,7 @@ export interface Admin {
   role: "SUPER_ADMIN";
 }
 
-export interface LoginRequest {
+export interface LoginPayload {
   email: string;
   password: string;
 }
@@ -14,12 +14,4 @@ export interface LoginResponse {
   admin: Admin;
   accessToken: string;
   refreshToken: string;
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
-  meta: unknown;
-  errors: unknown;
 }

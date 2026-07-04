@@ -1,7 +1,10 @@
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+
 import {
-  Header,
-  PageContainer,
   Sidebar,
+  Header,
+  Breadcrumb,
+  PageContainer,
 } from "@/components/layout";
 
 export default function DashboardLayout({
@@ -10,22 +13,22 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen bg-slate-100">
+    <ProtectedRoute>
 
       <Sidebar />
 
-      <div className="flex flex-1 flex-col">
+      <PageContainer>
 
         <Header />
 
-        <PageContainer>
+        <Breadcrumb />
 
+        <div className="p-8">
           {children}
+        </div>
 
-        </PageContainer>
+      </PageContainer>
 
-      </div>
-
-    </div>
+    </ProtectedRoute>
   );
 }
