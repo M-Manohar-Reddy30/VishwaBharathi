@@ -52,6 +52,10 @@ class EventService {
     return event;
   }
 
+  async getStats() {
+    return EventRepository.getStats();
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Read

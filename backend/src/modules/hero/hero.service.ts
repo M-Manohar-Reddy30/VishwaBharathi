@@ -57,48 +57,7 @@ class HeroService {
     }
 
     async getStats() {
-
-        const [
-            total,
-            published,
-            draft,
-            archived,
-            trash,
-        ] = await Promise.all([
-
-            Hero.countDocuments({
-            isDeleted: false,
-            }),
-
-            Hero.countDocuments({
-            status: "PUBLISHED",
-            isDeleted: false,
-            }),
-
-            Hero.countDocuments({
-            status: "DRAFT",
-            isDeleted: false,
-            }),
-
-            Hero.countDocuments({
-            status: "ARCHIVED",
-            isDeleted: false,
-            }),
-
-            Hero.countDocuments({
-            isDeleted: true,
-            }),
-
-        ]);
-
-        return {
-            total,
-            published,
-            draft,
-            archived,
-            trash,
-        };
-
+        return HeroRepository.getStats();
     }
 
     async getById(id:string){

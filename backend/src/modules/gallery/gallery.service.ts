@@ -47,6 +47,10 @@ class GalleryService {
     return gallery;
   }
 
+  async getStats() {
+    return GalleryRepository.getStats();
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Read

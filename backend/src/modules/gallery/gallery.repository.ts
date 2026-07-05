@@ -81,6 +81,68 @@ class GalleryRepository extends BaseRepository<GalleryDocument> {
     return this.model.findByIdAndDelete(id);
   }
 
+  async getStats() {
+    const [
+      total,
+      campus,
+      event,
+      sports,
+      academics,
+      cultural,
+      other,
+      trash,
+    ] = await Promise.all([
+      Gallery.countDocuments({
+        isDeleted: false,
+      }),
+
+      Gallery.countDocuments({
+        category: "CAMPUS",
+        isDeleted: false,
+      }),
+
+      Gallery.countDocuments({
+        category: "EVENT",
+        isDeleted: false,
+      }),
+
+      Gallery.countDocuments({
+        category: "SPORTS",
+        isDeleted: false,
+      }),
+
+      Gallery.countDocuments({
+        category: "ACADEMICS",
+        isDeleted: false,
+      }),
+
+      Gallery.countDocuments({
+        category: "CULTURAL",
+        isDeleted: false,
+      }),
+
+      Gallery.countDocuments({
+        category: "OTHER",
+        isDeleted: false,
+      }),
+
+      Gallery.countDocuments({
+        isDeleted: true,
+      }),
+    ]);
+
+    return {
+      total,
+      campus,
+      event,
+      sports,
+      academics,
+      cultural,
+      other,
+      trash,
+    };
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Display Order

@@ -58,6 +58,18 @@ class GalleryController {
 
   });
 
+  stats = asyncHandler(async (_req: Request, res: Response) => {
+
+    const stats = await GalleryService.getStats();
+
+    return ApiResponse.success(
+      res,
+      stats,
+      "Gallery statistics fetched successfully"
+    );
+
+  });
+
   /*
   |--------------------------------------------------------------------------
   | Get By Id

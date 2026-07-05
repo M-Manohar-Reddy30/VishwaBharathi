@@ -35,6 +35,47 @@ class HeroRepository extends BaseRepository<HeroDocument> {
       });
   }
 
+  async getStats() {
+    const [
+      total,
+      published,
+      draft,
+      archived,
+      trash,
+    ] = await Promise.all([
+      HeroBanner.countDocuments({
+        isDeleted: false,
+      }),
+
+      HeroBanner.countDocuments({
+        status: HeroStatus.PUBLISHED,
+        isDeleted: false,
+      }),
+
+      HeroBanner.countDocuments({
+        status: HeroStatus.DRAFT,
+        isDeleted: false,
+      }),
+
+      HeroBanner.countDocuments({
+        status: HeroStatus.ARCHIVED,
+        isDeleted: false,
+      }),
+
+      HeroBanner.countDocuments({
+        isDeleted: true,
+      }),
+    ]);
+
+    return {
+      total,
+      published,
+      draft,
+      archived,
+      trash,
+    };
+  }
+
   async existsByDisplayOrder(displayOrder: number) {
     return this.model.exists({
       displayOrder,

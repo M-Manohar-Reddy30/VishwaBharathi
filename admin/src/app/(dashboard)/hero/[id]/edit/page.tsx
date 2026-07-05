@@ -1,22 +1,22 @@
 "use client";
 
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 
 import { PageHeader } from "@/components/admin";
 
 import HeroForm from "@/features/hero/components/HeroForm";
 import { useHero } from "@/features/hero/hooks/useHero";
 
-interface EditHeroPageProps {
-  params: {
-    id: string;
-  };
-}
+export default function EditHeroPage() {
+  const params = useParams();
 
-export default function EditHeroPage({
-  params,
-}: EditHeroPageProps) {
-  const { data: hero, isLoading, isError } = useHero(params.id);
+  const id = params.id as string;
+
+  const {
+    data: hero,
+    isLoading,
+    isError,
+  } = useHero(id);
 
   if (isLoading) {
     return (

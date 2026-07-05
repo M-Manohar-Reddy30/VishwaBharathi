@@ -96,6 +96,13 @@ router.delete(
 |--------------------------------------------------------------------------
 */
 
+router.get(
+  "/admin/gallery/stats",
+  authenticate,
+  authorize("SUPER_ADMIN"),
+  GalleryController.stats
+);
+
 // Get By Id
 router.get(
   "/admin/gallery/:id",

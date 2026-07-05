@@ -31,6 +31,16 @@ class EventController {
 
   });
 
+  getStats = asyncHandler(async (_req: Request, res: Response) => {
+    const stats = await EventService.getStats();
+
+    return ApiResponse.success(
+      res,
+      stats,
+      "Event statistics fetched successfully"
+    );
+  });
+
   getAll = asyncHandler(async (req: Request, res: Response) => {
 
     const query = querySchema.parse(req.query);

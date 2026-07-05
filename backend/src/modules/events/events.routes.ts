@@ -97,6 +97,13 @@ router.delete(
 */
 
 router.get(
+  "/admin/events/stats",
+  authenticate,
+  authorize("SUPER_ADMIN"),
+  EventController.getStats
+);
+
+router.get(
   "/admin/events/:id",
   authenticate,
   authorize("SUPER_ADMIN"),

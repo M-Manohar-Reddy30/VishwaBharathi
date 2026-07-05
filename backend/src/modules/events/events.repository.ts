@@ -132,6 +132,47 @@ class EventRepository extends BaseRepository<EventDocument> {
     );
   }
 
+  async getStats() {
+    const [
+      total,
+      published,
+      draft,
+      archived,
+      trash,
+    ] = await Promise.all([
+      this.model.countDocuments({
+        isDeleted: false,
+      }),
+
+      this.model.countDocuments({
+        status: "PUBLISHED",
+        isDeleted: false,
+      }),
+
+      this.model.countDocuments({
+        status: "DRAFT",
+        isDeleted: false,
+      }),
+
+      this.model.countDocuments({
+        status: "ARCHIVED",
+        isDeleted: false,
+      }),
+
+      this.model.countDocuments({
+        isDeleted: true,
+      }),
+    ]);
+
+    return {
+      total,
+      published,
+      draft,
+      archived,
+      trash,
+    };
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Display Order

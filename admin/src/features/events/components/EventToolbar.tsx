@@ -2,22 +2,18 @@
 
 import { useRouter } from "next/navigation";
 
-import {
-  Toolbar,
-  SearchInput,
-} from "@/components/admin";
-
+import { Toolbar, SearchInput } from "@/components/admin";
 import { Button } from "@/components/ui";
 
-interface HeroToolbarProps {
+interface EventToolbarProps {
   search: string;
   onSearchChange: (value: string) => void;
 }
 
-export default function HeroToolbar({
+export default function EventToolbar({
   search,
   onSearchChange,
-}: HeroToolbarProps) {
+}: EventToolbarProps) {
   const router = useRouter();
 
   return (
@@ -25,13 +21,13 @@ export default function HeroToolbar({
       <SearchInput
         value={search}
         onChange={onSearchChange}
-        placeholder="Search hero banners..."
+        placeholder="Search events..."
       />
 
       <Button
-        onClick={() => router.push("/hero/create")}
+        onClick={() => router.push("/events/create")}
       >
-        + New Hero
+        + New Event
       </Button>
     </Toolbar>
   );
