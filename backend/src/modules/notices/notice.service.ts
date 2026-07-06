@@ -65,6 +65,10 @@ class NoticeService {
     return NoticeRepository.getActive();
   }
 
+  async getStats() {
+    return NoticeRepository.getStats();
+  }
+
   async getById(id: string) {
     const notice =
       await NoticeRepository.findById(id);

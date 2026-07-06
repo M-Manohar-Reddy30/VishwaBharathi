@@ -84,6 +84,42 @@ class UploadController {
 
       }
   }
+
+  async uploadDocument(req: Request, res: Response) {
+    if (!req.file) {
+      return ApiResponse.error(
+        res,
+        "No file uploaded.",
+        400
+      );
+    }
+
+    try {
+      const file = await uploadFile(
+        req.file.path,
+        "documents"
+      );
+
+      if (fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      return ApiResponse.success(
+        res,
+        file,
+        "Document uploaded successfully"
+      );
+    } catch (error) {
+      if (
+        req.file &&
+        fs.existsSync(req.file.path)
+      ) {
+        fs.unlinkSync(req.file.path);
+      }
+
+      throw error;
+    }
+  }
 }
 
 export default new UploadController();

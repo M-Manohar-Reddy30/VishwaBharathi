@@ -99,6 +99,40 @@ class StaffRepository extends BaseRepository<StaffDocument> {
     return this.model.findByIdAndDelete(id);
   }
 
+  async getStats() {
+    const [
+      total,
+      active,
+      inactive,
+      trash,
+    ] = await Promise.all([
+      this.model.countDocuments({
+        isDeleted: false,
+      }),
+
+      this.model.countDocuments({
+        status: "ACTIVE",
+        isDeleted: false,
+      }),
+
+      this.model.countDocuments({
+        status: "INACTIVE",
+        isDeleted: false,
+      }),
+
+      this.model.countDocuments({
+        isDeleted: true,
+      }),
+    ]);
+
+    return {
+      total,
+      active,
+      inactive,
+      trash,
+    };
+  }
+
   /*
   |--------------------------------------------------------------------------
   | Display Order

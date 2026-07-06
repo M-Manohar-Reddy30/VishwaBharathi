@@ -80,6 +80,13 @@ router.post(
   NoticeController.create
 );
 
+router.get(
+  "/admin/notices/stats",
+  authenticate,
+  authorize("SUPER_ADMIN"),
+  NoticeController.getStats
+);
+
 // Get by ID
 router.get(
   "/admin/notices/:id",

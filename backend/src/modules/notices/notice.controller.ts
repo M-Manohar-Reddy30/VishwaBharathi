@@ -51,6 +51,19 @@ class NoticeController {
     );
   });
 
+  getStats = asyncHandler(async (_req, res) => {
+
+    const stats =
+      await NoticeService.getStats();
+
+    return ApiResponse.success(
+      res,
+      stats,
+      "Notice statistics fetched successfully"
+    );
+
+  });
+
   getById = asyncHandler(async (req: Request, res: Response) => {
     const notice = await NoticeService.getById(req.params.id);
 

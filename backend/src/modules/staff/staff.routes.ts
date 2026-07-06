@@ -89,6 +89,13 @@ router.delete(
 // ===========================
 
 router.get(
+  "/admin/staff/stats",
+  authenticate,
+  authorize("SUPER_ADMIN"),
+  StaffController.getStats
+);
+
+router.get(
   "/admin/staff/:id",
   authenticate,
   authorize("SUPER_ADMIN"),

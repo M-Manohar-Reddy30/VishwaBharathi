@@ -40,7 +40,12 @@ export const uploadFile = async (
     url: result.secure_url,
     width: result.width,
     height: result.height,
-    format: result.format,
+
+    // Cloudinary may not return format for raw files
+    format:
+      result.format ??
+      extension.replace(".", ""),
+
     bytes: result.bytes,
     resourceType: result.resource_type,
   };

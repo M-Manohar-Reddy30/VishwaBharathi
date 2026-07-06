@@ -14,6 +14,14 @@ router.post(
 );
 
 router.post(
+  "/file",
+  authenticate,
+  upload.single("file"),
+  (req, res) =>
+    UploadController.uploadDocument(req, res)
+);
+
+router.post(
     "/images",
     authenticate,
     upload.array("images", 20),

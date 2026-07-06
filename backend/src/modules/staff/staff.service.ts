@@ -64,6 +64,10 @@ class StaffService {
     return StaffRepository.getActive();
   }
 
+  async getStats() {
+    return StaffRepository.getStats();
+  }
+
   async getById(id: string) {
     const staff = await StaffRepository.findById(id);
 

@@ -63,6 +63,18 @@ class StaffController {
     );
   });
 
+  getStats = asyncHandler(async (_req: Request, res: Response) => {
+
+    const stats = await StaffService.getStats();
+
+    return ApiResponse.success(
+      res,
+      stats,
+      "Staff statistics fetched successfully"
+    );
+
+  });
+
   getById = asyncHandler(async (req: Request, res: Response) => {
     const staff = await StaffService.getById(req.params.id);
 
